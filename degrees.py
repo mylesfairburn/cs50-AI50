@@ -95,14 +95,14 @@ def shortest_path(source, target):
     if source == target:
         return []
 
-    start = Node(state=source, parent=None, action=None)
-    frontier = QueueFrontier()
+    start = Node(state=source, parent=None, action=None)  # set begining node, first inputted name
+    frontier = QueueFrontier()  # queue - actors to check
     frontier.add(start)
-    explored = set()
+    explored = set()  # all visited nodes
 
-    while(True):
+    while (True):
         if frontier.empty():
-            return None
+            return None  # no connections
 
         node = frontier.remove()
         explored.add(node.state)
@@ -110,15 +110,16 @@ def shortest_path(source, target):
         for movie_id, person_id in neighbors_for_person(node.state):
             if not (frontier.contains_state(person_id) or person_id in explored):
                 child = Node(state=person_id, parent=node, action=movie_id)
-                if person_id == target:
+                if person_id == target:  # target found - second inputted name
                     path = []
                     while child.parent is not None:
                         path.append((child.action, child.state))
                         child = child.parent
                     path.reverse()
-                    return path
+                    return path 
                 else:
-                    frontier.add(child)
+                    frontier.add(child)  # append new node to check
+
 
 def person_id_for_name(name):
     """

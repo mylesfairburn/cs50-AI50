@@ -41,6 +41,9 @@ def result(board, action):
     """
     i, j = action
 
+    if not (0 <= i <= 2 and 0 <= j <= 2):
+        raise Exception("Invalid action - move out of bounds.")
+
     if board[i][j] is not EMPTY:
         raise Exception("Invalid action - cell already taken.")
 
@@ -73,8 +76,8 @@ def terminal(board):
     for row in board:
         for cell in row:
             if cell is None:
-                return False # found an empty square → not over
-    return True # no empties - board full - draw
+                return False  # found an empty square - not over
+    return True  # no empties - board full - draw
 
 
 def utility(board):
@@ -124,9 +127,11 @@ def maxValue(board, alpha, beta):
 
     v = -math.inf
     for action in actions(board):
-        v = max(v, minValue(result(board, action), alpha, beta))  # call oposite function to satisfy minimax tree
+        # call oposite function to satisfy minimax tree
+        v = max(v, minValue(result(board, action), alpha, beta))
         if v >= beta:
-            return v          # prune: minimiser above won't allow this branch - optimisation
+            # prune: minimiser above won't allow this branch - optimisation
+            return v
         alpha = max(alpha, v)
     return v
 
@@ -137,8 +142,10 @@ def minValue(board, alpha, beta):
 
     v = math.inf
     for action in actions(board):
-        v = min(v, maxValue(result(board, action), alpha, beta))  # call oposite function to satisfy minimax tree
+        # call oposite function to satisfy minimax tree
+        v = min(v, maxValue(result(board, action), alpha, beta))
         if v <= alpha:
-            return v          # prune: maximiser above won't allow this branch - optimisation
+            # prune: maximiser above won't allow this branch - optimisation
+            return v
         beta = min(beta, v)
     return v
